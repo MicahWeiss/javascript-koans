@@ -46,7 +46,6 @@ describe("About Applying What We Have Learnt", function() {
       /* solve using filter() & all() / any() */
        //_.filter( products, function(pizza){ isEdible(pizza)} );
       var productsICanEat = _.filter(products, function(item){return isEdible(item) });
-      console.log(productsICanEat);
       expect(productsICanEat.length).toBe(1);
   });
 
@@ -92,14 +91,17 @@ describe("About Applying What We Have Learnt", function() {
     var ingredientCount = { "{ingredient name}": 0 };
     var ingredientArray = [];
 
-    for (i = 0; i < products.length; i+=1) {
-      ingredientArray.push(products[i].ingredients);
-    }
+    //Without using _.chain()
+    /*ingredientArray = _.map(products, function(pizza){ return pizza.ingredients});
+    var outputArray = _.flatten(ingredientArray);
+    ingredientCount = _.countBy(outputArray, function(ingredient){ return ingredient });*/
 
     /* chain() together map(), flatten() and reduce() */
-    /*ingredientCount = ingredientArray.chain()
-                                     .flatten()
-                                     .reduce()*/
+    ingredientCount = _.chain(products)
+      .map(function(pizza){ return pizza.ingredients})
+      .flatten()
+      .countBy(function(ingredient){ return ingredient })
+      .value();
     expect(ingredientCount['mushrooms']).toBe(2);
   });
 
